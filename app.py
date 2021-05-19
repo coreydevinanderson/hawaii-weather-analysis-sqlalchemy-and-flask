@@ -65,11 +65,23 @@ def stations():
 def tobs():
 
     session = Session(engine)
-    station_activity = session.query(Measurement.station, func.count(Measurement.station)).group_by(Measurement.station).order_by(func.count(Measurement.station).desc()).all()
+
+    # Identify the most active station
+    station_activity = session.query(Measurement.station, func.count(Measurement.station))\
+                              .group_by(Measurement.station)\
+                              .order_by(func.count(Measurement.station).desc())\
+                              .all()
+    
     station_id = station_activity[0][0]
-    temps_last_year = session.query(Measurement.tobs).filter(Measurement.station == station_id).filter(Measurement.date >= '2016-08-23').all()
+    
+    # Obtain temperature date for the last year at the most active station
+    temps_last_year = session.query(Measurement.tobs)\
+                             .filter(Measurement.station == station_id)\
+                             .filter(Measurement.date >= '2016-08-23')\
+                             .all()
     session.close()
     
+    # Use list comprehension to remove the tuples from the list
     temps_list = [item for t in temps_last_year for item in t]
 
     return jsonify(temps_list)
@@ -79,26 +91,71 @@ def tobs():
 def start_temp(start):
 
     session = Session(engine)
-    station_activity = session.query(Measurement.station, func.count(Measurement.station)).group_by(Measurement.station).order_by(func.count(Measurement.station).desc()).all()
+    
+    # Identify the most active station
+    station_activity = session.query(Measurement.station, func.count(Measurement.station))\
+                              .group_by(Measurement.station)\
+                              .order_by(func.count(Measurement.station).desc())\
+                              .all()
+    
     station_id = station_activity[0][0]
-    temp_min = session.query(func.min(Measurement.tobs)).filter(Measurement.station == station_id).filter(Measurement.date >= start).first()[0]
-    temp_max = session.query(func.max(Measurement.tobs)).filter(Measurement.station == station_id).filter(Measurement.date >= start).first()[0]
-    temp_avg = session.query(func.avg(Measurement.tobs)).filter(Measurement.station == station_id).filter(Measurement.date >= start).first()[0]
+    
+    # Obtain minimum, maximum, and average temperature at the most active station since the specified start date
+    temp_min = session.query(func.min(Measurement.tobs))\
+                      .filter(Measurement.station == station_id)\
+                      .filter(Measurement.date >= start)\
+                      .first()[0]
+
+    temp_max = session.query(func.max(Measurement.tobs))\
+                      .filter(Measurement.station == station_id)\
+                      .filter(Measurement.date >= start)\
+                      .first()[0]
+    
+    temp_avg = session.query(func.avg(Measurement.tobs))\
+                      .filter(Measurement.station == station_id)\
+                      .filter(Measurement.date >= start)\
+                      .first()[0]
+    
     session.close()
 
     start_temp_list = [{"TMIN":temp_min, "TMAX":temp_max, "TAVG":temp_avg}]
 
     return jsonify(start_temp_list)
 
+
 @app.route("/api/v1.0/<start>/<end>")
 def start_end_temp(start, end):
 
     session = Session(engine)
-    station_activity = session.query(Measurement.station, func.count(Measurement.station)).group_by(Measurement.station).order_by(func.count(Measurement.station).desc()).all()
+
+    # Identify the most active station
+    station_activity = session.query(Measurement.station, func.count(Measurement.station))\
+                              .group_by(Measurement.station)\
+                              .order_by(func.count(Measurement.station).desc())\
+                              .all()
+    
     station_id = station_activity[0][0]
-    temp_min = session.query(func.min(Measurement.tobs)).filter(Measurement.station == station_id).filter(Measurement.date >= start).filter(Measurement.date <= end).first()[0]
-    temp_max = session.query(func.max(Measurement.tobs)).filter(Measurement.station == station_id).filter(Measurement.date >= start).filter(Measurement.date <= end).first()[0]
-    temp_avg = session.query(func.avg(Measurement.tobs)).filter(Measurement.station == station_id).filter(Measurement.date >= start).filter(Measurement.date <= end).first()[0]
+    
+
+    # Obtain minimum, maximum, and average temperature at the most active station since the specified start date
+    temp_min = session.query(func.min(Measurement.tobs))\
+                      .filter(Measurement.station == station_id)\
+                      .filter(Measurement.date >= start)\
+                      .filter(Measurement.date <= end)\
+                      .first()[0]
+
+    temp_max = session.query(func.max(Measurement.tobs))\
+                      .filter(Measurement.station == station_id)\
+                      .filter(Measurement.date >= start)\
+                      .filter(Measurement.date <= end)\
+                      .first()[0]
+
+    temp_avg = session.query(func.avg(Measurement.tobs))\
+                      .filter(Measurement.station == station_id)\
+                      .filter(Measurement.date >= start)\
+                      .filter(Measurement.date <= end)\
+                      .first()[0]
+
     session.close()
 
     start_end_temp_list = [{"TMIN":temp_min, "TMAX":temp_max, "TAVG":temp_avg}]
