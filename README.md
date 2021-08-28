@@ -1,4 +1,6 @@
-<strong>This repository contains Python code for the Georgia Tech Data Science and Analytics "sqlalchemy-challenge".</strong>
+<strong>This repository contains Python code in Jupyter Notebooks for getting and analyzing weather station data.</strong>
+----
+Weather data were stored in an sqllite database and extracted using 'sqlalchemy', with processing in 'pandas'.
 
 There are three Jupyter notebook files:
 1) climate_starter.ipynb
