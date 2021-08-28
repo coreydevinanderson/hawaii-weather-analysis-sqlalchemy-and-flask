@@ -15,9 +15,9 @@ There is one Python file containing the code for the 'flask' app:
 1) app.py
 
 All code was written by Corey D. Anderson in Python with additional functionality from the following packages:
--sqlalchemy
--pandas
--matplotlib
--numpy
--scipy
--datetime
+-sqlalchemy<br>
+-pandas<br>
+-matplotlib<br>
+-numpy<br>
+-scipy<br>
+-datetime<br>
