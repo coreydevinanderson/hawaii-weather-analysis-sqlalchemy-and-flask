@@ -4,7 +4,7 @@ I used a Python server (via 'flask') to make the cleaned data available online.
 
 ----
 
-Weather data were stored in an sqllite database and extracted using 'sqlalchemy', with cleaning in 'pandas'.
+Weather data were stored in an sqlite database and extracted using 'sqlalchemy', with cleaning in 'pandas'.
 
 There are three Jupyter notebook files:
 1) get_weather_data.ipynb
